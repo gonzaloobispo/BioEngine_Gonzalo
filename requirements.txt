@@ -7,3 +7,4 @@ python-dateutil
 google-genai
 plotly
 streamlit-authenticator
+openpyxl
