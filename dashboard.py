@@ -363,9 +363,15 @@ if True:  # Antes: if not df_s_f.empty and (not df_p_f_apis.empty or not df_p_f_
     with st.expander("Ver Historial de Pesos y Sesiones"):
         t1, t2 = st.tabs(["Historial de Peso", "Sesiones Deportivas"])
         with t1:
-            st.dataframe(df_p_f_full.sort_values('Fecha', ascending=False), hide_index=True)
+            if not df_p_f_full.empty and 'Fecha' in df_p_f_full.columns:
+                st.dataframe(df_p_f_full.sort_values('Fecha', ascending=False), hide_index=True)
+            else:
+                st.info("No hay datos de peso disponibles")
         with t2:
-            st.dataframe(df_s_f.sort_values('Fecha', ascending=False), hide_index=True)
+            if not df_s_f.empty and 'Fecha' in df_s_f.columns:
+                st.dataframe(df_s_f.sort_values('Fecha', ascending=False), hide_index=True)
+            else:
+                st.info("No hay datos de actividades disponibles")
             
 else:
     st.warning("⚠️ No hay datos suficientes para el rango seleccionado. Por favor, amplía el filtro en la barra lateral o sincroniza la nube.")
