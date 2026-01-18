@@ -283,7 +283,7 @@ def render_coach_chat(assistant):
         
         # Nueva acción: modificar plan de hoy (con lógica corregida)
         # Detectar keywords de modificación
-        keywords_modificacion = ["planifica", "agrega", "cambia", "modifica", "pon"]
+        keywords_modificacion = ["planifica", "agrega", "cambia", "modifica", "pon", "haz", "programa"]
         keywords_actividad = {
             "ciclismo": ("Ciclismo Recuperación", 45),
             "bicicleta": ("Ciclismo Recuperación", 45),
