@@ -1,16 +1,22 @@
 # Bio-Engine: Inteligencia Biomecánica Personalizada
 
+> **📊 Estado del Proyecto:** Ver `ESTADO_ACTUAL.md` para el estado detallado y tareas pendientes.
+
 ## Descripción
 
-Bio-Engine es un sistema ETL (Extract, Transform, Load) diseñado para unificar datos biométricos de múltiples fuentes (Garmin, Withings, Apple Health, Runkeeper, etc.) en un data warehouse centralizado. Transforma datos crudos en inteligencia accionable para análisis de rendimiento deportivo, prevención de lesiones y gestión de activos biomecánicos.
+Bio-Engine es un sistema ETL (Extract, Transform, Load) con **Asistente IA integrado** diseñado para unificar datos biométricos de múltiples fuentes (Garmin, Withings, Apple Health, Runkeeper, etc.) en un data warehouse centralizado. Transforma datos crudos en inteligencia accionable para análisis de rendimiento deportivo, prevención de lesiones y gestión de activos biomecánicos.
 
 ### Características Principales
-- Integración automática con APIs de Garmin Connect y Withings
-- Procesamiento de datos históricos de Apple Health, Runkeeper y PesoBook
-- Dashboard interactivo con Streamlit para visualización de KPIs
-- Auditoría forense de datos para validar integridad
-- Gestión inteligente de calzado y eventos deportivos
-- Análisis de eficiencia energética y ROI deportivo
+- ✅ **Chat IA con Gemini** - Asistente personal biomecánico conversacional
+- ✅ **Memoria Contextual** - El asistente aprende de tus patrones y preferencias
+- ✅ **Modificación de plan vía chat** - Cambia tu rutina hablando naturalmente
+- ✅ **Tracking de dolor de rodilla** - Registro automático y análisis inteligente
+- ✅ Integración automática con APIs de Garmin Connect y Withings
+- ✅ Procesamiento de datos históricos de Apple Health, Runkeeper y PesoBook
+- ✅ Dashboard interactivo con Streamlit para visualización de KPIs
+- ✅ Auditoría forense de datos para validar integridad
+- ✅ Gestión inteligente de calzado y eventos deportivos
+- ✅ Análisis de eficiencia energética y ROI deportivo
 
 ## Instalación
 
