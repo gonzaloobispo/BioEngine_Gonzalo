@@ -237,9 +237,34 @@ def render_coach_chat(assistant):
     # Simulación de estado de chat
     if "messages" not in st.session_state:
         st.session_state.messages = []
-        # Mensaje inicial del sistema basado en análisis
-        # Hack: usaremos una propiedad dummy o análisis fresco
-        st.session_state.messages.append({"role": "assistant", "content": "Hola Gonzalo. He revisado tu carga de hoy. ¿Cómo sientes la rodilla después del esfuerzo?"})
+        
+        # Verificar si ya respondió sobre dolor hoy
+        from datetime import datetime
+        import json
+        import os
+        
+        dolor_file = os.path.join(config.BASE_DIR, 'data_cloud_sync', 'dolor_rodilla.json')
+        ya_respondio_hoy = False
+        
+        try:
+            if os.path.exists(dolor_file):
+                with open(dolor_file, 'r', encoding='utf-8') as f:
+                    dolor_data = json.load(f)
+                    hoy = datetime.now().strftime('%Y-%m-%d')
+                    for registro in dolor_data.get('registros', []):
+                        if registro.get('fecha') == hoy:
+                            ya_respondio_hoy = True
+                            break
+        except Exception:
+            pass
+        
+        # Mensaje inicial adaptado
+        if ya_respondio_hoy:
+            mensaje_inicial = "Hola Gonzalo. ¿En qué puedo ayudarte hoy?"
+        else:
+            mensaje_inicial = "Hola Gonzalo. He revisado tu carga de hoy. ¿Cómo sientes la rodilla después del esfuerzo?"
+        
+        st.session_state.messages.append({"role": "assistant", "content": mensaje_inicial})
 
     # Mostrar historia
     for msg in st.session_state.messages:
@@ -372,6 +397,54 @@ def render_coach_chat(assistant):
         # Si se modificó el plan, forzar recarga en próximo refresh
         if plan_modificado:
             st.session_state['plan_modified'] = True
+        
+        # Detectar y registrar estado de rodilla
+        keywords_dolor = ["rodilla", "dolor", "siento", "molestia"]
+        keywords_bien = ["bien", "ok", "sin dolor", "genial", "perfecto", "normal"]
+        
+        if any(kw in prompt.lower() for kw in keywords_dolor):
+            # Usuario mencionó la rodilla
+            intensidad = None
+            
+            # Buscar intensidad numérica (1-10)
+            import re
+            numeros = re.findall(r'\b([1-9]|10)\b', prompt)
+            if numeros:
+                intensidad = int(numeros[0])
+            elif any(kw in prompt.lower() for kw in keywords_bien):
+                intensidad = 0
+            
+            if intensidad is not None:
+                # Guardar registro
+                from datetime import datetime
+                import json
+                import os
+                
+                dolor_file = os.path.join(config.BASE_DIR, 'data_cloud_sync', 'dolor_rodilla.json')
+                
+                try:
+                    if os.path.exists(dolor_file):
+                        with open(dolor_file, 'r', encoding='utf-8') as f:
+                            dolor_data = json.load(f)
+                    else:
+                        dolor_data = {"registros": []}
+                    
+                    # Agregar nuevo registro
+                    dolor_data['registros'].append({
+                        "fecha": datetime.now().strftime('%Y-%m-%d'),
+                        "hora": datetime.now().strftime('%H:%M'),
+                        "intensidad": intensidad,
+                        "nota": prompt[:100],  # Primeros 100 caracteres
+                        "registrado_via": "chat"
+                    })
+                    
+                    # Guardar
+                    with open(dolor_file, 'w', encoding='utf-8') as f:
+                        json.dump(dolor_data, f, indent=2, ensure_ascii=False)
+                    
+                    st.success(f"✅ Estado de rodilla registrado: {intensidad}/10")
+                except Exception as e:
+                    pass  # Fallar silenciosamente
             
         with st.chat_message("assistant"):
             st.markdown(reply_text)
