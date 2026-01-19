@@ -325,6 +325,14 @@ def render_coach_chat(assistant):
             "recent_activities": recent_activities  # Nuevas actividades
         }
         
+        # Agregar contexto persistente del usuario
+        try:
+            from context_manager import ContextManager
+            ctx_mgr = ContextManager()
+            context['user_context'] = ctx_mgr.get_context_summary()
+        except Exception:
+            pass  # Continuar sin contexto persistente si falla
+        
         with st.spinner("Pensando..."):
             # Pasar historial de conversación para memoria
             conversation_history = [{"role": msg["role"], "content": msg["content"]} 
