@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import visualizations
 import datetime
+import config
 
 def render_kpi_header(df_s_f, df_p_f_full, last_p, last_p_date):
     """Renderiza la sección de KPIs principales"""
