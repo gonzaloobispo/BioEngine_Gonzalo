@@ -476,3 +476,22 @@ def render_bio_timeline_section(df_sport, assistant):
     else:
         st.info("No hay suficientes datos para construir la línea de tiempo.")
 
+
+
+def add_chat_css():
+    import streamlit as st
+    st.markdown("""<style>
+/* Mejorar UX del chat */
+.stChatFloatingInputContainer {
+    position: sticky !important;
+    bottom: 0 !important;
+    background: white;
+    z-index: 999;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+/* Auto-scroll */
+.stChatMessage {
+    scroll-margin-bottom: 100px;
+}
+</style>""", unsafe_allow_html=True)
