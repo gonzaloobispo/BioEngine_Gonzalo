@@ -259,10 +259,20 @@ class TrainerAssistant:
         total_km_7d = last_7_days['Distancia (km)'].sum()
         
         # 2. Verificar la Alerta de Tendinosis vs Carga actual
+        # Solo contar actividades de IMPACTO (NO ciclismo, NO natación)
         tendinosis = self._get_lesion("Tendinosis") # Busca genérico
         impact_warning = False
-        if tendinosis and total_km_7d > 5: # Si corre más de 5km teniendo tendinosis activa
-            impact_warning = True
+        
+        if tendinosis:
+            # Filtrar solo actividades de impacto
+            actividades_impacto = ['Carrera', 'Running', 'Correr', 'Trail', 'Tenis', 'Trekking', 'Caminata']
+            if 'Actividad' in last_7_days.columns:
+                df_impacto = last_7_days[last_7_days['Actividad'].str.contains('|'.join(actividades_impacto), case=False, na=False)]
+                km_impacto_7d = df_impacto['Distancia (km)'].sum()
+                
+                if km_impacto_7d > 5:  # Más de 5km de actividades de impacto
+                    impact_warning = True
+                    total_km_7d = km_impacto_7d  # Actualizar para mostrar solo km de impacto
 
         # 3. Verificar Stress Score (Stress Crónico)
         high_stress_days = last_7_days[last_7_days['Stress_Score'] > 400] if 'Stress_Score' in last_7_days.columns else pd.DataFrame()

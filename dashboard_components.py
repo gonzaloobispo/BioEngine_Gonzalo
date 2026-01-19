@@ -253,12 +253,35 @@ def render_coach_chat(assistant):
             st.markdown(prompt)
 
         # Motor de INTELIGENCIA REAL (Gemini)
-        # Preparamos contexto
+        # Preparamos contexto con actividades recientes
+        from datetime import datetime, timedelta
+        import pandas as pd
+        
+        # Obtener actividades de los últimos 7 días si existen
+        recent_activities = []
+        try:
+            df_sport = pd.read_csv(config.CSV_DEPORTE_MAESTRO, sep=';')
+            if not df_sport.empty and 'Fecha' in df_sport.columns:
+                df_sport['Fecha'] = pd.to_datetime(df_sport['Fecha'])
+                fecha_limite = datetime.now() - timedelta(days=7)
+                df_reciente = df_sport[df_sport['Fecha'] >= fecha_limite].sort_values('Fecha', ascending=False)
+                
+                for _, row in df_reciente.head(10).iterrows():
+                    recent_activities.append({
+                        'fecha': row['Fecha'].strftime('%Y-%m-%d'),
+                        'actividad': row.get('Actividad', 'Desconocida'),
+                        'duracion_min': row.get('Duración (min)', 0),
+                        'distancia_km': row.get('Distancia (km)', 0)
+                    })
+        except Exception:
+            pass
+        
         context = {
             "medical": assistant.medical_history,
             "inventory": assistant.inventory,
             "plan": assistant.current_plan,
-            "protocol": assistant.protocol
+            "protocol": assistant.protocol,
+            "recent_activities": recent_activities  # Nuevas actividades
         }
         
         with st.spinner("Pensando..."):
