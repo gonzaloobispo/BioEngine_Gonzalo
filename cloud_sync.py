@@ -47,9 +47,9 @@ def _format_columns_es(df, column_decimals):
     return df
 
 def sync_garmin_module():
-    print("   🛰️ (1/2) Conectando a Garmin...")
+    print("   [GARMIN] (1/2) Conectando a Garmin...")
     if "tu_email" in config.GARMIN_EMAIL:
-        return "⚠️ Salteado: Falta configurar email en config.py"
+        return "[WARNING] Salteado: Falta configurar email en config.py"
 
     try:
         client = Garmin(config.GARMIN_EMAIL, config.GARMIN_PASSWORD)
@@ -58,14 +58,14 @@ def sync_garmin_module():
         ultima_fecha = obtener_ultima_fecha_garmin()
         hoy = datetime.date.today()
         if ultima_fecha >= hoy:
-            return "✅ Garmin al día."
+            return "[OK] Garmin al día."
             
         start_date = ultima_fecha + datetime.timedelta(days=1)
         print(f"      Descargando desde {start_date}...")
         
         activities = client.get_activities_by_date(start_date.isoformat(), hoy.isoformat())
         if not activities:
-            return "✅ Garmin: Sin datos nuevos."
+            return "[OK] Garmin: Sin datos nuevos."
 
         nuevos = []
         for act in activities:
@@ -92,10 +92,10 @@ def sync_garmin_module():
             'Calorias': 0,
         })
         df_final.to_csv(config.RAW_GARMIN_FILE, sep=';', index=False)
-        return f"✅ Garmin: +{len(nuevos)} actividades."
+        return f"[OK] Garmin: +{len(nuevos)} actividades."
 
     except Exception as e:
-        return f"❌ Error Garmin: {str(e)}"
+        return f"[ERROR] Error Garmin: {str(e)}"
 
 # ==========================================
 # ⚖️ MÓDULO WITHINGS (CON AUTO-RENOVACIÓN)
@@ -111,7 +111,7 @@ def guardar_tokens_withings(token_data):
         json.dump(token_data, f)
 
 def refrescar_token_withings(refresh_token):
-    print("      ♻️ Renovando Token Withings caducado...")
+    print("      [REFRESH] Renovando Token Withings caducado...")
     url = "https://wbsapi.withings.net/v2/oauth2"
     payload = {
         'action': 'requesttoken',
@@ -146,14 +146,14 @@ def obtener_ultima_fecha_withings():
                 if pd.notna(max_fecha):
                     return int(max_fecha.timestamp())
         except Exception as e:
-            print(f"   ⚠️ Error leyendo fecha Withings: {e}")
+            print(f"   [WARNING] Error leyendo fecha Withings: {e}")
     return 1672531200 # 01/01/2023 como fallback
 
 def sync_withings_module():
-    print("   ⚖️ (2/2) Conectando a Withings...")
+    print("   [WITHINGS] (2/2) Conectando a Withings...")
     tokens = cargar_tokens_withings()
     if not tokens:
-        return "⚠️ Withings: Falta 'withings_tokens.json'."
+        return "[WARNING] Withings: Falta 'withings_tokens.json'."
 
     access_token = tokens['access_token']
     last_update = obtener_ultima_fecha_withings()
@@ -176,11 +176,11 @@ def sync_withings_module():
             r = requests.post(url, headers=headers, data=params)
             data = r.json()
         else:
-            return "❌ Withings: Falló renovación."
+            return "[ERROR] Withings: Falló renovación."
 
     if data['status'] == 0:
         grps = data['body']['measuregrps']
-        if not grps: return "✅ Withings: Sin datos nuevos."
+        if not grps: return "[OK] Withings: Sin datos nuevos."
         nuevos = []
         for g in grps:
             fecha = datetime.datetime.fromtimestamp(g['date'])
@@ -207,8 +207,8 @@ def sync_withings_module():
             'Masa_Muscular_Kg': 2,
         })
         df_final.to_csv(ruta_out, sep=';', index=False)
-        return f"✅ Withings: +{len(nuevos)} pesajes."
-    return f"❌ Error Withings: {data['status']}"
+        return f"[OK] Withings: +{len(nuevos)} pesajes."
+    return f"[ERROR] Error Withings: {data['status']}"
 
 def sincronizar_todo():
     print("\nCLOUD INICIANDO SINCRONIZACIÓN TOTAL...")
@@ -241,4 +241,5 @@ def sincronizar_todo():
 
 if __name__ == "__main__":
     print(sincronizar_todo())
+
 
