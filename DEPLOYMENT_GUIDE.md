@@ -46,7 +46,7 @@ password = "EL_HASH_QUE_GENERASTE"
 
 ## Paso 4: Acceso desde iPhone
 
-La URL será: `https://tu-usuario-bioengine-gonzalo.streamlit.app`
+La URL será: `https://bioenginegonzalo-2r498ml3ub6fncsjt3grdy.streamlit.app/`
 
 ### Agregar a Home Screen:
 1. Abre Safari en iPhone

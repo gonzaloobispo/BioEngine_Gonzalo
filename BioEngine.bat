@@ -3,6 +3,9 @@ title Lanzador Bio-Engine Gonzalo
 cls
 cd /d "C:\BioEngine_Gonzalo"
 
+:: CONFIGURACION DE URL (Cambiala si tu URL de Streamlit cambia)
+set CLOUD_URL=https://bioenginegonzalo-2r498ml3ub6fncsjt3grdy.streamlit.app/
+
 echo ======================================================
 echo          Bio-Engine: Inteligencia Biomecanica
 echo ======================================================
@@ -16,7 +19,7 @@ set /p choice="Selecciona una opcion (1-4): "
 
 if "%choice%"=="1" (
     echo Lanzando Dashboard en la Nube...
-    start https://bioengine-gonzalo.streamlit.app
+    start %CLOUD_URL%
     goto end
 )
 
