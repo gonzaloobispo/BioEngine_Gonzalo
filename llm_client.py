@@ -112,7 +112,8 @@ CONTEXTO ACTUAL ({today}):
                 current_plan = context['plan']
                 # Resumir plan para ahorrar tokens
                 plan_summary = []
-                for d in current_plan.get('dias', []):
+                if current_plan and 'semana' in current_plan:
+                    for d in current_plan.get('semana', []):
                     plan_summary.append(f"{d['dia']} ({d['fecha']}): {d['actividad']} [{d['estado']}]")
                 prompt += f"\n[PLAN SEMANAL]:\n" + "\n".join(plan_summary)
             if 'protocol' in context:
