@@ -54,9 +54,9 @@ authenticator = stauth.Authenticate(
     cookie_expiry_days=90  # Sesión persistente por 90 días
 )
 
-# Mostrar info sobre sesión persistente antes del login
+# Mostrar info sobre sesión antes del login
 if not st.session_state.get('authentication_status'):
-    st.info('🔐 **Sesión Persistente Activada**: Una vez que inicies sesión, permanecerás logueado por 90 días (mientras no borres las cookies del navegador)')
+    st.info('ℹ️ **Nota**: Por limitaciones de Streamlit Cloud, necesitarás re-autenticarte al refrescar. En móvil (agregar a pantalla de inicio) funciona mejor.')
 
 # Call login - this renders the login form
 authenticator.login()
