@@ -211,19 +211,19 @@ def sync_withings_module():
     return f"❌ Error Withings: {data['status']}"
 
 def sincronizar_todo():
-    print("\n☁️ INICIANDO SINCRONIZACIÓN TOTAL...")
+    print("\nCLOUD INICIANDO SINCRONIZACIÓN TOTAL...")
     res_garmin = sync_garmin_module()
     res_withings = sync_withings_module()
     
     # Auto-actualizar estadísticas del contexto del usuario
     try:
         from context_manager import ContextManager
-        print("   📊 Recalculando estadísticas del usuario...")
+        print("    Recalculando estadísticas del usuario...")
         ctx_mgr = ContextManager()
         ctx_mgr.recalculate_stats_from_csv()
         
         # Detectar patrones automáticamente
-        print("   🔍 Detectando patrones...")
+        print("    Detectando patrones...")
         from pattern_detector import PatternDetector
         detector = PatternDetector(ctx_mgr)
         patterns = detector.analyze_all_patterns()
@@ -241,3 +241,4 @@ def sincronizar_todo():
 
 if __name__ == "__main__":
     print(sincronizar_todo())
+
