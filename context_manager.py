@@ -285,9 +285,9 @@ class ContextManager:
             self.context['estadisticas_ultimos_30d'] = stats
             self._save_context()
             
-            print(f"✅ Estadísticas recalculadas: {stats['actividades_completadas']} actividades, {stats['km_totales']} km")
+            print(f"[OK] Estadisticas recalculadas: {stats['actividades_completadas']} actividades, {stats['km_totales']} km")
             return True
             
         except Exception as e:
-            print(f"⚠️ Error recalculando stats: {e}")
+            print(f"[WARNING] Error recalculando stats: {e}")
             return False
